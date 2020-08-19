@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.flink.types.Row;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,7 +203,17 @@ public class JdbcOutputFormat extends BaseRichOutputFormat {
         int index = 0;
         try {
             for (; index < row.getArity(); index++) {
-                preparedStatement.setObject(index+1,getField(row,index));
+                Object object = getField(row,index);
+//                if (object instanceof Integer) {
+//                    preparedStatement.setObject(index+1, object);
+//                } else {
+//                    preparedStatement.setString(index+1 , String.valueOf(object));
+//                }
+                if(object instanceof ArrayList || object instanceof Document){
+                    preparedStatement.setString(index+1 , String.valueOf(object));
+                } else {
+                    preparedStatement.setObject(index+1, object);
+                }
             }
 
             preparedStatement.execute();
