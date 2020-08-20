@@ -204,12 +204,7 @@ public class JdbcOutputFormat extends BaseRichOutputFormat {
         try {
             for (; index < row.getArity(); index++) {
                 Object object = getField(row,index);
-//                if (object instanceof Integer) {
-//                    preparedStatement.setObject(index+1, object);
-//                } else {
-//                    preparedStatement.setString(index+1 , String.valueOf(object));
-//                }
-                if(object instanceof ArrayList || object instanceof Document){
+                if(object instanceof ArrayList){
                     preparedStatement.setString(index+1 , String.valueOf(object));
                 } else {
                     preparedStatement.setObject(index+1, object);

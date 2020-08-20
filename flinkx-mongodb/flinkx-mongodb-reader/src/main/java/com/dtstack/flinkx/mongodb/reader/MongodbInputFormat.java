@@ -131,6 +131,8 @@ public class MongodbInputFormat extends BaseRichInputFormat {
 
                 if(value instanceof String){
                     value = StringUtil.string2col(String.valueOf(value),metaColumn.getType(),metaColumn.getTimeFormat());
+                } else if (value instanceof Document) {
+                    value = ((Document) value).toJson();
                 }
 
                 row.setField(i,value);
